@@ -8,6 +8,8 @@ import { api } from "../../../../convex/_generated/api";
 import ActionCard from "@/components/ActionCard";
 import { useRouter } from "next/navigation";
 import MeetingModal from "@/components/MeetingModal";
+import MeetingCard from "@/components/MeetingCard";
+import { Loader2Icon } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
@@ -77,7 +79,7 @@ export default function Home() {
           </div>
 
           <div className="mt-8">
-            {/* {interviews === undefined ? (
+            {interviews === undefined ? (
               <div className="flex justify-center py-12">
                 <Loader2Icon className="h-8 w-8 animate-spin text-muted-foreground" />
               </div>
@@ -91,7 +93,7 @@ export default function Home() {
               <div className="text-center py-12 text-muted-foreground">
                 You have no scheduled interviews at the moment
               </div>
-            )} */}
+            )}
           </div>
         </>
       )}
