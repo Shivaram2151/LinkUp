@@ -13,9 +13,11 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as codeRooms from "../codeRooms.js";
 import type * as comments from "../comments.js";
 import type * as http from "../http.js";
 import type * as interviews from "../interviews.js";
+import type * as runCode from "../runCode.js";
 import type * as users from "../users.js";
 
 /**
@@ -27,9 +29,11 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  codeRooms: typeof codeRooms;
   comments: typeof comments;
   http: typeof http;
   interviews: typeof interviews;
+  runCode: typeof runCode;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

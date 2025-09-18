@@ -1,3 +1,5 @@
+"use client";
+
 import {
   CallControls,
   CallingState,
@@ -5,6 +7,7 @@ import {
   PaginatedGridLayout,
   SpeakerLayout,
   useCallStateHooks,
+  useCall,
 } from "@stream-io/video-react-sdk";
 import { LayoutListIcon, LoaderIcon, UsersIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -24,13 +27,28 @@ import { Button } from "./ui/button";
 import EndCallButton from "./EndCallButton";
 import CodeEditor from "./CodeEditor";
 
+// Convex
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { useAuth } from "@clerk/nextjs";
+
 function MeetingRoom() {
   const router = useRouter();
+  const { useCallCallingState } = useCallStateHooks();
+  const callingState = useCallCallingState();
+  const call = useCall();
+
+  // Clerk auth
+  const { userId } = useAuth();
+
+  // Get the interview linked to this call
+  const streamCallId = call?.id || "";
+  const interview = useQuery(api.interviews.getInterviewByStreamCallId, {
+    streamCallId,
+  });
+
   const [layout, setLayout] = useState<"grid" | "speaker">("speaker");
   const [showParticipants, setShowParticipants] = useState(false);
-  const { useCallCallingState } = useCallStateHooks();
-
-  const callingState = useCallCallingState();
 
   if (callingState !== CallingState.JOINED) {
     return (
@@ -64,7 +82,6 @@ function MeetingRoom() {
           </div>
 
           {/* VIDEO CONTROLS */}
-
           <div className="absolute bottom-4 left-0 right-0">
             <div className="flex flex-col items-center gap-4">
               <div className="flex items-center gap-2 flex-wrap justify-center px-4">
@@ -106,7 +123,13 @@ function MeetingRoom() {
         <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={65} minSize={25}>
-          <CodeEditor />
+          {interview && userId ? (
+            <CodeEditor interviewId={interview._id} userId={userId} />
+          ) : (
+            <div className="h-full flex items-center justify-center text-muted-foreground">
+              Loading code editor…
+            </div>
+          )}
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>

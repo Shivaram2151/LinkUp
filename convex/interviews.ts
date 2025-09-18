@@ -74,3 +74,14 @@ export const updateInterviewStatus = mutation({
     });
   },
 });
+
+export const getInterviewById = query({
+  args: { id: v.id("interviews") },
+  handler: async (ctx, args) => {
+    const interview = await ctx.db.get(args.id);
+    if (!interview) {
+      throw new Error("Interview not found");
+    }
+    return interview;
+  },
+});

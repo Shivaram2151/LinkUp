@@ -28,4 +28,14 @@ export default defineSchema({
     interviewerId: v.string(),
     interviewId: v.id("interviews"),
   }).index("by_interview_id", ["interviewId"]),
+
+  // 👇 New table for collaborative code editor
+  codeRooms: defineTable({
+    interviewId: v.id("interviews"), // link code editor to an interview
+    language: v.string(), // e.g. "javascript" | "python" | "java"
+    code: v.string(),
+    questionId: v.string(),
+    updatedBy: v.string(), // userId who last updated
+    updatedAt: v.number(), // timestamp
+  }).index("by_interview_id", ["interviewId"]),
 });

@@ -186,7 +186,6 @@ export const QUICK_ACTIONS = [
 ];
 
 export const CODING_QUESTIONS: CodeQuestion[] = [
-  // Existing questions here...
   {
     id: "two-sum",
     title: "Two Sum",
@@ -194,34 +193,25 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       "Given an array of integers `nums` and an integer `target`, return indices of the two numbers in the array such that they add up to `target`.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.",
     examples: [
       {
-        input: "nums = [2,7,11,15], target = 9",
-        output: "[0,1]",
+        input: { nums: [2, 7, 11, 15], target: 9 },
+        output: [0, 1],
         explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]",
       },
       {
-        input: "nums = [3,2,4], target = 6",
-        output: "[1,2]",
+        input: { nums: [3, 2, 4], target: 6 },
+        output: [1, 2],
+        explanation: "nums[1] + nums[2] == 6, so return [1, 2]",
       },
     ],
     starterCode: {
-      javascript: `function twoSum(nums, target) {
-  // Write your solution here
-  
-}`,
-      python: `def two_sum(nums, target):
-    # Write your solution here
-    pass`,
-      java: `class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        // Write your solution here
-        
-    }
-}`,
+      javascript: `function twoSum(nums, target) {\n  // Write your solution here\n}`,
+      python: `def two_sum(nums, target):\n    # Write your solution here\n    pass`,
+      java: `class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        // Write your solution here\n    }\n}`,
     },
     constraints: [
-      "2 ≤ nums.length ≤ 104",
-      "-109 ≤ nums[i] ≤ 109",
-      "-109 ≤ target ≤ 109",
+      "2 ≤ nums.length ≤ 10^4",
+      "-10^9 ≤ nums[i] ≤ 10^9",
+      "-10^9 ≤ target ≤ 10^9",
       "Only one valid answer exists.",
     ],
   },
@@ -232,28 +222,18 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       "Write a function that reverses a string. The input string is given as an array of characters `s`.\n\nYou must do this by modifying the input array in-place with O(1) extra memory.",
     examples: [
       {
-        input: 's = ["h","e","l","l","o"]',
-        output: '["o","l","l","e","h"]',
+        input: { s: ["h", "e", "l", "l", "o"] },
+        output: ["o", "l", "l", "e", "h"],
       },
       {
-        input: 's = ["H","a","n","n","a","h"]',
-        output: '["h","a","n","n","a","H"]',
+        input: { s: ["H", "a", "n", "n", "a", "h"] },
+        output: ["h", "a", "n", "n", "a", "H"],
       },
     ],
     starterCode: {
-      javascript: `function reverseString(s) {
-  // Write your solution here
-  
-}`,
-      python: `def reverse_string(s):
-    # Write your solution here
-    pass`,
-      java: `class Solution {
-    public void reverseString(char[] s) {
-        // Write your solution here
-        
-    }
-}`,
+      javascript: `function reverseString(s) {\n  // Write your solution here\n}`,
+      python: `def reverse_string(s):\n    # Write your solution here\n    pass`,
+      java: `class Solution {\n    public void reverseString(char[] s) {\n        // Write your solution here\n    }\n}`,
     },
   },
   {
@@ -263,32 +243,22 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       "Given an integer `x`, return `true` if `x` is a palindrome, and `false` otherwise.\n\nAn integer is a palindrome when it reads the same forward and backward.",
     examples: [
       {
-        input: "x = 121",
-        output: "true",
+        input: { x: 121 },
+        output: true,
         explanation:
           "121 reads as 121 from left to right and from right to left.",
       },
       {
-        input: "x = -121",
-        output: "false",
+        input: { x: -121 },
+        output: false,
         explanation:
           "From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.",
       },
     ],
     starterCode: {
-      javascript: `function isPalindrome(x) {
-  // Write your solution here
-  
-}`,
-      python: `def is_palindrome(x):
-    # Write your solution here
-    pass`,
-      java: `class Solution {
-    public boolean isPalindrome(int x) {
-        // Write your solution here
-        
-    }
-}`,
+      javascript: `function isPalindrome(x) {\n  // Write your solution here\n}`,
+      python: `def is_palindrome(x):\n    # Write your solution here\n    pass`,
+      java: `class Solution {\n    public boolean isPalindrome(int x) {\n        // Write your solution here\n    }\n}`,
     },
   },
   {
@@ -297,28 +267,13 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
     description:
       "Given an integer `n`, return the `n`th Fibonacci number.\n\nThe Fibonacci sequence is defined as:\n- F(0) = 0, F(1) = 1\n- F(n) = F(n - 1) + F(n - 2) for n > 1",
     examples: [
-      {
-        input: "n = 2",
-        output: "1",
-      },
-      {
-        input: "n = 5",
-        output: "5",
-      },
+      { input: { n: 2 }, output: 1 },
+      { input: { n: 5 }, output: 5 },
     ],
     starterCode: {
-      javascript: `function fibonacci(n) {
-  // Write your solution here
-  
-}`,
-      python: `def fibonacci(n):
-    # Write your solution here
-    pass`,
-      java: `class Solution {
-    public int fibonacci(int n) {
-        // Write your solution here
-    }
-}`,
+      javascript: `function fibonacci(n) {\n  // Write your solution here\n}`,
+      python: `def fibonacci(n):\n    # Write your solution here\n    pass`,
+      java: `class Solution {\n    public int fibonacci(int n) {\n        // Write your solution here\n    }\n}`,
     },
     constraints: ["0 ≤ n ≤ 30"],
   },
@@ -329,27 +284,18 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       "Given two sorted integer arrays `nums1` and `nums2`, merge `nums2` into `nums1` as one sorted array.",
     examples: [
       {
-        input: "nums1 = [1,2,3,0,0,0], nums2 = [2,5,6]",
-        output: "[1,2,2,3,5,6]",
+        input: { nums1: [1, 2, 3, 0, 0, 0], nums2: [2, 5, 6] },
+        output: [1, 2, 2, 3, 5, 6],
       },
     ],
     starterCode: {
-      javascript: `function mergeSortedArrays(nums1, nums2) {
-  // Write your solution here
-  
-}`,
-      python: `def merge_sorted_arrays(nums1, nums2):
-    # Write your solution here
-    pass`,
-      java: `class Solution {
-    public void mergeSortedArrays(int[] nums1, int[] nums2) {
-        // Write your solution here
-    }
-}`,
+      javascript: `function mergeSortedArrays(nums1, nums2) {\n  // Write your solution here\n}`,
+      python: `def merge_sorted_arrays(nums1, nums2):\n    # Write your solution here\n    pass`,
+      java: `class Solution {\n    public void mergeSortedArrays(int[] nums1, int[] nums2) {\n        // Write your solution here\n    }\n}`,
     },
     constraints: [
       "0 ≤ nums1.length, nums2.length ≤ 200",
-      "-109 ≤ nums1[i], nums2[i] ≤ 109",
+      "-10^9 ≤ nums1[i], nums2[i] ≤ 10^9",
     ],
   },
   {
@@ -358,30 +304,15 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
     description:
       "Given a string `s` containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets are closed by the same type of brackets.\n2. Open brackets are closed in the correct order.",
     examples: [
-      {
-        input: 's = "()"',
-        output: "true",
-      },
-      {
-        input: 's = "([)]"',
-        output: "false",
-      },
+      { input: { s: "()" }, output: true },
+      { input: { s: "([)]" }, output: false },
     ],
     starterCode: {
-      javascript: `function isValid(s) {
-  // Write your solution here
-  
-}`,
-      python: `def is_valid(s):
-    # Write your solution here
-    pass`,
-      java: `class Solution {
-    public boolean isValid(String s) {
-        // Write your solution here
-    }
-}`,
+      javascript: `function isValid(s) {\n  // Write your solution here\n}`,
+      python: `def is_valid(s):\n    # Write your solution here\n    pass`,
+      java: `class Solution {\n    public boolean isValid(String s) {\n        // Write your solution here\n    }\n}`,
     },
-    constraints: ["1 ≤ s.length ≤ 104", "s consists of parentheses only."],
+    constraints: ["1 ≤ s.length ≤ 10^4", "s consists of parentheses only."],
   },
   {
     id: "longest-common-prefix",
@@ -389,28 +320,13 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
     description:
       'Write a function to find the longest common prefix string amongst an array of strings.\n\nIf there is no common prefix, return an empty string `""`.',
     examples: [
-      {
-        input: 'strs = ["flower","flow","flight"]',
-        output: '"fl"',
-      },
-      {
-        input: 'strs = ["dog","racecar","car"]',
-        output: '""',
-      },
+      { input: { strs: ["flower", "flow", "flight"] }, output: "fl" },
+      { input: { strs: ["dog", "racecar", "car"] }, output: "" },
     ],
     starterCode: {
-      javascript: `function longestCommonPrefix(strs) {
-  // Write your solution here
-  
-}`,
-      python: `def longest_common_prefix(strs):
-    # Write your solution here
-    pass`,
-      java: `class Solution {
-    public String longestCommonPrefix(String[] strs) {
-        // Write your solution here
-    }
-}`,
+      javascript: `function longestCommonPrefix(strs) {\n  // Write your solution here\n}`,
+      python: `def longest_common_prefix(strs):\n    # Write your solution here\n    pass`,
+      java: `class Solution {\n    public String longestCommonPrefix(String[] strs) {\n        // Write your solution here\n    }\n}`,
     },
     constraints: [
       "0 ≤ strs.length ≤ 200",
@@ -431,15 +347,11 @@ export interface CodeQuestion {
   title: string;
   description: string;
   examples: Array<{
-    input: string;
-    output: string;
+    input: any; // object or string
+    output: any; // object, array, or string
     explanation?: string;
   }>;
-  starterCode: {
-    javascript: string;
-    python: string;
-    java: string;
-  };
+  starterCode: Record<"javascript" | "python" | "java", string>;
   constraints?: string[];
 }
 
