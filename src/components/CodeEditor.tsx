@@ -24,6 +24,7 @@ import Editor from "@monaco-editor/react";
 import type { Id } from "../../convex/_generated/dataModel";
 import type * as monaco from "monaco-editor";
 import { useAction } from "convex/react";
+import { useUserRole } from "@/hooks/useUserRole";
 
 type CodeEditorProps = {
   interviewId: Id<"interviews">;
@@ -31,6 +32,9 @@ type CodeEditorProps = {
 };
 
 function CodeEditor({ interviewId, userId }: CodeEditorProps) {
+  const { isInterviewer } = useUserRole();
+
+  const saveSubmission = useMutation(api.submissions.saveSubmission);
   const runCode = useAction(api.runCode.runCode);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const isApplyingRemote = useRef(false);
@@ -282,12 +286,61 @@ function CodeEditor({ interviewId, userId }: CodeEditorProps) {
       language,
       code: wrappedCode,
     });
-    console.log(wrappedCode, "result");
+
     let outputText =
       result.stdout || result.stderr || result.compile_output || "No output";
 
     setOutput(outputText);
+
+    // Save submission to Convex
+    await saveSubmission({
+      interviewId,
+      userId,
+      questionId: selectedQuestion.id,
+      code,
+      language,
+      output: outputText,
+      score: 0, // calculate later
+      isFinal: false, // 🚀 only mark final later
+    });
   };
+  function calculateScore(output: string, questionScore: number) {
+    const testCases = output.split("-----------------"); // split by each test case
+    let passed = 0;
+    let total = 0;
+
+    for (const t of testCases) {
+      if (!t.trim()) continue;
+      total++;
+      const match = t.match(/Expected: (.+)\nOutput: (.+)/s);
+      if (match) {
+        const expected = match[1].trim();
+        const actual = match[2].trim();
+        if (expected === actual) passed++;
+      }
+    }
+
+    // ✅ Only award score if all pass
+    return total > 0 && passed === total ? questionScore : 0;
+  }
+
+  useEffect(() => {
+    if (!isCandidate) return;
+
+    const interval = setInterval(() => {
+      if (!codeRoom) return;
+
+      updateCode({
+        interviewId,
+        code: codeRoom?.code,
+        updatedBy: userId,
+      });
+
+      console.log("Auto-saved code");
+    }, 30000); // 30 seconds (use 60000 for 60s)
+
+    return () => clearInterval(interval); // cleanup on unmount
+  }, [codeRoom?.code, codeRoom, interviewId, updateCode, userId, isCandidate]);
 
   return (
     <ResizablePanelGroup
@@ -454,14 +507,6 @@ function CodeEditor({ interviewId, userId }: CodeEditorProps) {
               defaultValue={code} // initial code
               onChange={handleCodeChange}
               onMount={(editor) => (editorRef.current = editor)}
-              // options={{
-              //   minimap: { enabled: false },
-              //   fontSize: 18,
-              //   scrollBeyondLastLine: false,
-              //   automaticLayout: true,
-              //   readOnly: !isCandidate,
-              //   wordWrap: "on",
-              // }}
               options={{
                 minimap: { enabled: false },
                 fontSize: 18,
@@ -475,12 +520,35 @@ function CodeEditor({ interviewId, userId }: CodeEditorProps) {
               }}
             />
 
-            <button
-              onClick={handleRun}
-              className="absolute top-4 right-4 z-10 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-            >
-              Run Code
-            </button>
+            {/* Candidate-only actions */}
+            {!isInterviewer && (
+              <div className="absolute top-4 right-4 z-10 flex gap-2">
+                <button
+                  onClick={handleRun}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                >
+                  Run Code
+                </button>
+                <button
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                  onClick={async () => {
+                    await saveSubmission({
+                      interviewId,
+                      userId,
+                      questionId: selectedQuestion.id,
+                      code: codeRoom?.code ?? "",
+                      language,
+                      output,
+                      score: calculateScore(output, selectedQuestion.score), // ⚡ implement scoring
+                      isFinal: true,
+                    });
+                    alert("✅ Final submission saved!");
+                  }}
+                >
+                  Submit Final
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Output panel */}

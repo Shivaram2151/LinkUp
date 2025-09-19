@@ -214,6 +214,7 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       "-10^9 ≤ target ≤ 10^9",
       "Only one valid answer exists.",
     ],
+    score: 10, // ✅ score/weight for this question
   },
   {
     id: "reverse-string",
@@ -235,6 +236,7 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       python: `def reverse_string(s):\n    # Write your solution here\n    pass`,
       java: `class Solution {\n    public void reverseString(char[] s) {\n        // Write your solution here\n    }\n}`,
     },
+    score: 10, // ✅ score/weight for this question
   },
   {
     id: "palindrome-number",
@@ -260,6 +262,7 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       python: `def is_palindrome(x):\n    # Write your solution here\n    pass`,
       java: `class Solution {\n    public boolean isPalindrome(int x) {\n        // Write your solution here\n    }\n}`,
     },
+    score: 10, // ✅ score/weight for this question
   },
   {
     id: "fibonacci-number",
@@ -276,6 +279,7 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       java: `class Solution {\n    public int fibonacci(int n) {\n        // Write your solution here\n    }\n}`,
     },
     constraints: ["0 ≤ n ≤ 30"],
+    score: 10, // ✅ score/weight for this question
   },
   {
     id: "merge-sorted-arrays",
@@ -297,6 +301,7 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       "0 ≤ nums1.length, nums2.length ≤ 200",
       "-10^9 ≤ nums1[i], nums2[i] ≤ 10^9",
     ],
+    score: 10, // ✅ score/weight for this question
   },
   {
     id: "valid-parentheses",
@@ -313,6 +318,7 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       java: `class Solution {\n    public boolean isValid(String s) {\n        // Write your solution here\n    }\n}`,
     },
     constraints: ["1 ≤ s.length ≤ 10^4", "s consists of parentheses only."],
+    score: 10, // ✅ score/weight for this question
   },
   {
     id: "longest-common-prefix",
@@ -333,6 +339,7 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       "0 ≤ strs[i].length ≤ 200",
       "strs[i] consists of lowercase English letters only.",
     ],
+    score: 10, // ✅ score/weight for this question
   },
 ];
 
@@ -353,6 +360,7 @@ export interface CodeQuestion {
   }>;
   starterCode: Record<"javascript" | "python" | "java", string>;
   constraints?: string[];
+  score: number; // ✅ score/weight for this question
 }
 
 export type QuickActionType = (typeof QUICK_ACTIONS)[number];

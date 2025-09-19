@@ -12,11 +12,14 @@ import {
 import { CalendarIcon } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import Link from "next/link";
+import { useUserRole } from "@/hooks/useUserRole";
 
 type Interview = Doc<"interviews">;
 
 function MeetingCard({ interview }: { interview: Interview }) {
   const { joinMeeting } = useMeetingActions();
+  const { isInterviewer } = useUserRole();
 
   const status = getMeetingStatus(interview);
   const formattedDate = format(
@@ -73,6 +76,16 @@ function MeetingCard({ interview }: { interview: Interview }) {
           <Button variant="outline" className="w-full" disabled>
             Waiting to Start
           </Button>
+        )}
+        {isInterviewer && (
+          <>
+            {/* ✅ New submissions button for interviewer */}
+            <Link href={`/interviewer/${interview._id}/submissions`}>
+              <Button variant="secondary" className="w-full">
+                View Submissions
+              </Button>
+            </Link>
+          </>
         )}
       </CardContent>
     </Card>

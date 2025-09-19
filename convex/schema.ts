@@ -38,4 +38,22 @@ export default defineSchema({
     updatedBy: v.string(), // userId who last updated
     updatedAt: v.number(), // timestamp
   }).index("by_interview_id", ["interviewId"]),
+
+  submissions: defineTable({
+    interviewId: v.id("interviews"),
+    userId: v.string(),
+    questionId: v.string(),
+    code: v.string(),
+    language: v.string(),
+    output: v.string(),
+    createdAt: v.number(),
+    score: v.optional(v.number()),
+    isFinal: v.optional(v.boolean()), // 🚀 marks final submission
+  })
+    .index("by_interview_user_question", [
+      "interviewId",
+      "userId",
+      "questionId",
+    ])
+    .index("by_interview", ["interviewId"]),
 });
