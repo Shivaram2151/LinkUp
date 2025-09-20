@@ -184,7 +184,6 @@ export const QUICK_ACTIONS = [
     gradient: "from-orange-500/10 via-orange-500/5 to-transparent",
   },
 ];
-
 export const CODING_QUESTIONS: CodeQuestion[] = [
   {
     id: "two-sum",
@@ -192,16 +191,12 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
     description:
       "Given an array of integers `nums` and an integer `target`, return indices of the two numbers in the array such that they add up to `target`.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.",
     examples: [
-      {
-        input: { nums: [2, 7, 11, 15], target: 9 },
-        output: [0, 1],
-        explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]",
-      },
-      {
-        input: { nums: [3, 2, 4], target: 6 },
-        output: [1, 2],
-        explanation: "nums[1] + nums[2] == 6, so return [1, 2]",
-      },
+      { input: { nums: [2, 7, 11, 15], target: 9 }, output: [0, 1] },
+      { input: { nums: [3, 2, 4], target: 6 }, output: [1, 2] },
+    ],
+    hiddenTests: [
+      { input: { nums: [0, 4, 3, 0], target: 0 }, output: [0, 3] },
+      { input: { nums: [-1, -2, -3, -4, -5], target: -8 }, output: [2, 4] },
     ],
     starterCode: {
       javascript: `function twoSum(nums, target) {\n  // Write your solution here\n}`,
@@ -214,7 +209,7 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       "-10^9 ≤ target ≤ 10^9",
       "Only one valid answer exists.",
     ],
-    score: 10, // ✅ score/weight for this question
+    score: 10,
   },
   {
     id: "reverse-string",
@@ -231,38 +226,36 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
         output: ["h", "a", "n", "n", "a", "H"],
       },
     ],
+    hiddenTests: [
+      { input: { s: ["a"] }, output: ["a"] },
+      { input: { s: ["A", "B", "C", "D"] }, output: ["D", "C", "B", "A"] },
+    ],
     starterCode: {
       javascript: `function reverseString(s) {\n  // Write your solution here\n}`,
       python: `def reverse_string(s):\n    # Write your solution here\n    pass`,
       java: `class Solution {\n    public void reverseString(char[] s) {\n        // Write your solution here\n    }\n}`,
     },
-    score: 10, // ✅ score/weight for this question
+    score: 10,
   },
   {
     id: "palindrome-number",
     title: "Palindrome Number",
     description:
-      "Given an integer `x`, return `true` if `x` is a palindrome, and `false` otherwise.\n\nAn integer is a palindrome when it reads the same forward and backward.",
+      "Given an integer `x`, return `true` if `x` is a palindrome, and `false` otherwise.",
     examples: [
-      {
-        input: { x: 121 },
-        output: true,
-        explanation:
-          "121 reads as 121 from left to right and from right to left.",
-      },
-      {
-        input: { x: -121 },
-        output: false,
-        explanation:
-          "From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.",
-      },
+      { input: { x: 121 }, output: true },
+      { input: { x: -121 }, output: false },
+    ],
+    hiddenTests: [
+      { input: { x: 10 }, output: false },
+      { input: { x: 1331 }, output: true },
     ],
     starterCode: {
       javascript: `function isPalindrome(x) {\n  // Write your solution here\n}`,
       python: `def is_palindrome(x):\n    # Write your solution here\n    pass`,
       java: `class Solution {\n    public boolean isPalindrome(int x) {\n        // Write your solution here\n    }\n}`,
     },
-    score: 10, // ✅ score/weight for this question
+    score: 10,
   },
   {
     id: "fibonacci-number",
@@ -273,13 +266,17 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       { input: { n: 2 }, output: 1 },
       { input: { n: 5 }, output: 5 },
     ],
+    hiddenTests: [
+      { input: { n: 0 }, output: 0 },
+      { input: { n: 10 }, output: 55 },
+    ],
     starterCode: {
       javascript: `function fibonacci(n) {\n  // Write your solution here\n}`,
       python: `def fibonacci(n):\n    # Write your solution here\n    pass`,
       java: `class Solution {\n    public int fibonacci(int n) {\n        // Write your solution here\n    }\n}`,
     },
     constraints: ["0 ≤ n ≤ 30"],
-    score: 10, // ✅ score/weight for this question
+    score: 10,
   },
   {
     id: "merge-sorted-arrays",
@@ -292,6 +289,10 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
         output: [1, 2, 2, 3, 5, 6],
       },
     ],
+    hiddenTests: [
+      { input: { nums1: [0], nums2: [1] }, output: [0, 1] },
+      { input: { nums1: [1, 5, 9], nums2: [] }, output: [1, 5, 9] },
+    ],
     starterCode: {
       javascript: `function mergeSortedArrays(nums1, nums2) {\n  // Write your solution here\n}`,
       python: `def merge_sorted_arrays(nums1, nums2):\n    # Write your solution here\n    pass`,
@@ -301,7 +302,7 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       "0 ≤ nums1.length, nums2.length ≤ 200",
       "-10^9 ≤ nums1[i], nums2[i] ≤ 10^9",
     ],
-    score: 10, // ✅ score/weight for this question
+    score: 10,
   },
   {
     id: "valid-parentheses",
@@ -312,13 +313,17 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       { input: { s: "()" }, output: true },
       { input: { s: "([)]" }, output: false },
     ],
+    hiddenTests: [
+      { input: { s: "{[]}" }, output: true },
+      { input: { s: "(((" }, output: false },
+    ],
     starterCode: {
       javascript: `function isValid(s) {\n  // Write your solution here\n}`,
       python: `def is_valid(s):\n    # Write your solution here\n    pass`,
       java: `class Solution {\n    public boolean isValid(String s) {\n        // Write your solution here\n    }\n}`,
     },
     constraints: ["1 ≤ s.length ≤ 10^4", "s consists of parentheses only."],
-    score: 10, // ✅ score/weight for this question
+    score: 10,
   },
   {
     id: "longest-common-prefix",
@@ -328,6 +333,13 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
     examples: [
       { input: { strs: ["flower", "flow", "flight"] }, output: "fl" },
       { input: { strs: ["dog", "racecar", "car"] }, output: "" },
+    ],
+    hiddenTests: [
+      {
+        input: { strs: ["interspecies", "interstellar", "interstate"] },
+        output: "inters",
+      },
+      { input: { strs: ["throne", "dungeon"] }, output: "" },
     ],
     starterCode: {
       javascript: `function longestCommonPrefix(strs) {\n  // Write your solution here\n}`,
@@ -339,7 +351,7 @@ export const CODING_QUESTIONS: CodeQuestion[] = [
       "0 ≤ strs[i].length ≤ 200",
       "strs[i] consists of lowercase English letters only.",
     ],
-    score: 10, // ✅ score/weight for this question
+    score: 10,
   },
 ];
 
@@ -357,6 +369,10 @@ export interface CodeQuestion {
     input: any; // object or string
     output: any; // object, array, or string
     explanation?: string;
+  }>;
+  hiddenTests?: Array<{
+    input: any; // hidden test input
+    output: any; // hidden test expected output
   }>;
   starterCode: Record<"javascript" | "python" | "java", string>;
   constraints?: string[];

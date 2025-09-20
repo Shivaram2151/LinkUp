@@ -342,6 +342,159 @@ function CodeEditor({ interviewId, userId }: CodeEditorProps) {
     return () => clearInterval(interval); // cleanup on unmount
   }, [codeRoom?.code, codeRoom, interviewId, updateCode, userId, isCandidate]);
 
+  const handleFinalSubmit = async () => {
+    if (!selectedQuestion) return;
+
+    const examples = [
+      ...selectedQuestion.examples,
+      ...(selectedQuestion.hiddenTests || []),
+    ];
+
+    if (!examples.length) return;
+
+    if (!codeRoom?.code) {
+      throw new Error("No code available to submit");
+    }
+    const codeToRun = codeRoom.code;
+
+    const inputStr = JSON.stringify(examples.map((ex) => ex.input));
+    const expectedStr = JSON.stringify(examples.map((ex) => ex.output));
+    let wrappedCode = "";
+
+    if (language === "javascript") {
+      wrappedCode = `
+${codeToRun}
+
+const inputs = ${inputStr};
+const expected = ${expectedStr};
+let passed = 0;
+
+inputs.forEach((ex, i) => {
+  try {
+    const fn = ${selectedQuestion.starterCode.javascript.includes("twoSum") ? "twoSum" : "func"};
+    const result = fn(ex.nums, ex.target);
+    const ok = JSON.stringify(result) === JSON.stringify(expected[i]);
+    if (ok) passed++;
+
+    console.log('Test Case', i+1);
+    console.log('Input:', JSON.stringify(ex));
+    console.log('Expected:', JSON.stringify(expected[i]));
+    console.log('Output:', JSON.stringify(result));
+    console.log(ok ? "Passed" : "Failed");
+    console.log('-----------------');
+  } catch(err) {
+    console.log('Test Case', i+1, 'Error:', err.message);
+    console.log('-----------------');
+  }
+});
+
+console.log('SCORE:', passed + '/' + inputs.length);
+`;
+    } else if (language === "python") {
+      wrappedCode = `
+${codeToRun}
+
+import json
+examples = json.loads('${inputStr}')
+expected = json.loads('${expectedStr}')
+passed = 0
+
+for i, ex in enumerate(examples):
+    try:
+        fn = ${selectedQuestion.starterCode.python.includes("two_sum") ? "two_sum" : "func"}
+        result = fn(ex["nums"], ex["target"])
+        ok = result == expected[i]
+        if ok: passed += 1
+
+        print("Test Case", i+1)
+        print("Input:", ex)
+        print("Expected:", expected[i])
+        print("Output:", result)
+        print("Passed" if ok else "Failed")
+        print("-----------------")
+    except Exception as e:
+        print("Test Case", i+1, "Error:", str(e))
+        print("-----------------")
+
+print("SCORE:", str(passed) + "/" + str(len(examples)))
+`;
+    } else if (language === "java") {
+      wrappedCode = `
+${codeToRun}
+
+public class Main {
+    public static void main(String[] args) {
+        Object[][] testCases = new Object[][]{
+            ${examples
+              .map(
+                (ex) =>
+                  `new Object[]{new int[]{${ex.input.nums.join(",")}}, ${ex.input.target}, new int[]{${ex.output.join(",")}}}`
+              )
+              .join(",\n")}
+        };
+
+        Solution sol = new Solution();
+        int passed = 0;
+
+        for (int i = 0; i < testCases.length; i++) {
+            try {
+                int[] nums = (int[]) testCases[i][0];
+                int target = (int) testCases[i][1];
+                int[] expected = (int[]) testCases[i][2];
+                int[] result = sol.twoSum(nums, target);
+
+                boolean ok = java.util.Arrays.equals(result, expected);
+                if(ok) passed++;
+
+                System.out.println("Test Case " + (i+1));
+                System.out.println("Input: nums=" + java.util.Arrays.toString(nums) + ", target=" + target);
+                System.out.println("Expected: " + java.util.Arrays.toString(expected));
+                System.out.println("Output: " + java.util.Arrays.toString(result));
+                System.out.println(ok ? "Passed" : "Failed");
+                System.out.println("-----------------");
+            } catch(Exception e) {
+                System.out.println("Test Case " + (i+1) + " Error: " + e.getMessage());
+                System.out.println("-----------------");
+            }
+        }
+
+        System.out.println("SCORE: " + passed + "/" + testCases.length);
+    }
+}
+`;
+    }
+
+    // Run in sandbox
+    const result = await runCode({ language, code: wrappedCode });
+
+    const outputText =
+      result.stdout || result.stderr || result.compile_output || "No output";
+    setOutput(outputText);
+
+    // Extract score
+    const match = outputText.match(/SCORE:\s*(\d+)\/(\d+)/);
+    let score = 0;
+    if (match) {
+      const correct = parseInt(match[1], 10);
+      const total = parseInt(match[2], 10);
+      score = Math.round((correct / total) * selectedQuestion.score);
+    }
+
+    // Save submission
+    await saveSubmission({
+      interviewId,
+      userId,
+      questionId: selectedQuestion.id,
+      code: codeToRun,
+      language,
+      output: outputText,
+      score,
+      isFinal: true,
+    });
+
+    alert(`Final submission saved! Score: ${score}/${selectedQuestion.score}`);
+  };
+
   return (
     <ResizablePanelGroup
       direction="vertical"
@@ -531,19 +684,7 @@ function CodeEditor({ interviewId, userId }: CodeEditorProps) {
                 </button>
                 <button
                   className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-                  onClick={async () => {
-                    await saveSubmission({
-                      interviewId,
-                      userId,
-                      questionId: selectedQuestion.id,
-                      code: codeRoom?.code ?? "",
-                      language,
-                      output,
-                      score: calculateScore(output, selectedQuestion.score), // ⚡ implement scoring
-                      isFinal: true,
-                    });
-                    alert("✅ Final submission saved!");
-                  }}
+                  onClick={() => handleFinalSubmit()}
                 >
                   Submit Final
                 </button>

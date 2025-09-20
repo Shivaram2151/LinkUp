@@ -8,11 +8,6 @@ export const runCode = action({
   },
 
   handler: async (ctx, args) => {
-    console.log(
-      "Using RAPIDAPI_KEY:",
-      process.env.RAPIDAPI_KEY ? "Loaded ✅" : "Missing ❌"
-    );
-
     const response = await fetch(
       "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=true",
       {
